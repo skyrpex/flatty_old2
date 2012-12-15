@@ -91,7 +91,7 @@ Qt::ItemFlags AnimModel::flags(const QModelIndex &index) const
     if(!index.isValid())
         return 0;
 
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
 QModelIndex AnimModel::index(int row, int column, const QModelIndex &parent) const
