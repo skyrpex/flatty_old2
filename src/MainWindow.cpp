@@ -5,6 +5,7 @@
 #include "widgets/AnimsWidget.h"
 #include "widgets/TimeWidget.h"
 #include "widgets/GraphicsWidget.h"
+#include "Application.h"
 #include <QxGraphicsView>
 #include <QGraphicsScene>
 #include <QSplitter>
@@ -16,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
     m_model(new JointModel(this))
 {
     ui->setupUi(this);
+    ui->menuEdit->addAction(qApp->undoStack()->createUndoAction(this));
+    ui->menuEdit->addAction(qApp->undoStack()->createRedoAction(this));
 
     new Joint("Rack", m_model->root());
 
