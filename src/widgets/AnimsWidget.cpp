@@ -8,6 +8,7 @@
 #include <QAction>
 #include <QDebug>
 #include "commands/CreateAnimCommand.h"
+#include "commands/DeleteAnimCommand.h"
 #include "Application.h"
 
 AnimsWidget::AnimsWidget(AnimModel *model, QWidget *parent) :
@@ -81,7 +82,9 @@ void AnimsWidget::editAnim()
 
 void AnimsWidget::removeAnim()
 {
-    delete static_cast<Anim *>(m_view->currentIndex().internalPointer());
+    Anim *anim = static_cast<Anim *>(m_view->currentIndex().internalPointer());
+    DeleteAnimCommand *command = new DeleteAnimCommand(m_model, anim);
+    qApp->undoStack()->push(command);
 }
 
 void AnimsWidget::updateActions()
