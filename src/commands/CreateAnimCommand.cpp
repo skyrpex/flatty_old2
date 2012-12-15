@@ -1,4 +1,6 @@
 #include "CreateAnimCommand.h"
+#include "model/AnimModel.h"
+#include "model/Anim.h"
 #include <QDebug>
 
 CreateAnimCommand::CreateAnimCommand(AnimModel *model, Anim *anim) :

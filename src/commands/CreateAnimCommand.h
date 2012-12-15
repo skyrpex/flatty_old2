@@ -2,8 +2,9 @@
 #define CREATEANIMCOMMAND_H
 
 #include <QUndoCommand>
-#include <model/AnimModel.h>
-#include <model/Anim.h>
+
+class AnimModel;
+class Anim;
 
 class CreateAnimCommand : public QUndoCommand
 {
