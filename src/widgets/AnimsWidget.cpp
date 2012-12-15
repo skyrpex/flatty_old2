@@ -82,7 +82,6 @@ void AnimsWidget::editAnim()
 void AnimsWidget::removeAnim()
 {
     delete static_cast<Anim *>(m_view->currentIndex().internalPointer());
-    emit currentAnimChanged(m_view->currentIndex().row());
 }
 
 void AnimsWidget::updateActions()
