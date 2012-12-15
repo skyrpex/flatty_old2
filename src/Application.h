@@ -2,6 +2,7 @@
 #define APPLICATION_H
 
 #include <QApplication>
+#include <QUndoStack>
 
 #if defined(qApp)
 #undef qApp
@@ -13,6 +14,11 @@ class Application : public QApplication
     Q_OBJECT
 public:
     explicit Application(int argc, char **argv);
+
+    QUndoStack *undoStack();
+
+private:
+    QUndoStack *m_undoStack;
 };
 
 #endif // APPLICATION_H
