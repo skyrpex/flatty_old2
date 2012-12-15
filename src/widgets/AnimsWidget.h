@@ -4,6 +4,7 @@
 #include <QWidget>
 
 class AnimModel;
+class Anim;
 class QTreeView;
 class QModelIndex;
 class QAction;
@@ -16,7 +17,7 @@ public:
 
 signals:
     void currentAnimChanged(int i);
-    
+
 private slots:
     void createAnim();
     void editAnim();
@@ -25,6 +26,8 @@ private slots:
     void onCurrentRowChanged(const QModelIndex &index);
 
 private:
+    Anim *animFromUser();
+
     AnimModel *m_model;
     QTreeView *m_view;
     QAction *m_createAction;

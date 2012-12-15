@@ -6,6 +6,9 @@
 #include <QVBoxLayout>
 #include <QToolBar>
 #include <QAction>
+#include <QDebug>
+#include "commands/CreateAnimCommand.h"
+#include "Application.h"
 
 AnimsWidget::AnimsWidget(AnimModel *model, QWidget *parent) :
     QWidget(parent),
@@ -40,15 +43,28 @@ void AnimsWidget::onCurrentRowChanged(const QModelIndex &index)
     emit currentAnimChanged(index.row());
 }
 
+Anim *AnimsWidget::animFromUser()
+{
+    AnimDialog dialog(this);
+    if(!dialog.exec())
+        return NULL;
+
+    return new Anim(dialog.name(), dialog.frameCount(), dialog.fps());
+}
+
 void AnimsWidget::createAnim()
 {
-    AnimDialog d(this);
-    if(!d.exec()) return;
+    Anim *anim = this->animFromUser();
+    if(!anim)
+        return;
 
-    m_model->addAnim(new Anim(d.name(), d.frameCount(), d.fps()));
+    CreateAnimCommand *command = new CreateAnimCommand(m_model, anim);;
+    qApp->undoStack()->push(command);
 
     // Set the new anim as current index
-    m_view->setCurrentIndex(m_model->index(m_model->anims().count()-1, 0, QModelIndex()));
+    int row = m_model->anims().count()-1;
+    QModelIndex index = m_model->index(row, 0, QModelIndex());
+    m_view->setCurrentIndex(index);
 }
 
 void AnimsWidget::editAnim()
