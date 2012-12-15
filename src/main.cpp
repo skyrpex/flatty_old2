@@ -18,10 +18,11 @@
 #include <QGraphicsScene>
 #include "widgets/graphics/GraphicsJoint.h"
 #include "MainWindow.h"
+#include "Application.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    Application a(argc, argv);
 
     MainWindow w;
     w.show();
