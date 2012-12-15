@@ -28,7 +28,8 @@ SOURCES += \
     MainWindow.cpp \
     widgets/GraphicsWidget.cpp \
     commands/CreateAnimCommand.cpp \
-    commands/DeleteAnimCommand.cpp
+    commands/DeleteAnimCommand.cpp \
+    commands/EditAnimCommand.cpp
 
 HEADERS  += \
     model/JointModel.h \
@@ -52,7 +53,8 @@ HEADERS  += \
     MainWindow.h \
     widgets/GraphicsWidget.h \
     commands/CreateAnimCommand.h \
-    commands/DeleteAnimCommand.h
+    commands/DeleteAnimCommand.h \
+    commands/EditAnimCommand.h
 
 RESOURCES += \
     model/images/images.qrc

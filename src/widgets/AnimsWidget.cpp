@@ -9,6 +9,7 @@
 #include <QDebug>
 #include "commands/CreateAnimCommand.h"
 #include "commands/DeleteAnimCommand.h"
+#include "commands/EditAnimCommand.h"
 #include "Application.h"
 
 AnimsWidget::AnimsWidget(AnimModel *model, QWidget *parent) :
@@ -73,11 +74,11 @@ void AnimsWidget::editAnim()
     Anim *anim = static_cast<Anim *>(m_view->currentIndex().internalPointer());
 
     AnimDialog d(anim->name(), anim->frameCount(), anim->fps(), this);
-    if(!d.exec()) return;
+    if(!d.exec())
+        return;
 
-    anim->setName(d.name());
-    anim->setFrameCount(d.frameCount());
-    anim->setFps(d.fps());
+    EditAnimCommand *command = new EditAnimCommand(anim, d.name(), d.frameCount(), d.fps());;
+    qApp->undoStack()->push(command);
 }
 
 void AnimsWidget::removeAnim()
