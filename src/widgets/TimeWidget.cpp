@@ -71,7 +71,7 @@ TimeWidget::TimeWidget(JointModel *model, QWidget *parent) :
 void TimeWidget::setCurrentAnim(int i)
 {
     // Enable / disable widgets
-    bool enable = i != -1;
+    bool enable = (i != -1);
     ui->namesView->setEnabled(enable);
     ui->timeLineView->setEnabled(enable);
     ui->frameCount->setEnabled(enable);
