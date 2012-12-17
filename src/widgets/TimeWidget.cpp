@@ -67,27 +67,39 @@ TimeWidget::TimeWidget(JointModel *model, QWidget *parent) :
     connect(header, SIGNAL(currentFrameChanged(int)), timeLineView->viewport(), SLOT(update()));
     connect(header, SIGNAL(currentFrameChanged(int)), SIGNAL(currentFrameChanged(int)));
 
+    // Configure spinboxes
+    connect(ui->frameCount, SIGNAL(editingFinished()), SLOT(updateAnimFrameCount()));
+    connect(ui->fps, SIGNAL(editingFinished()), SLOT(updateAnimFps()));
+
     // Initialize
     setCurrentAnim(-1);
 }
 
 void TimeWidget::setCurrentAnim(int i)
 {
-    // Enable / disable widgets
-    bool enable = (i != -1);
-    ui->namesView->setEnabled(enable);
-    ui->timeLineView->setEnabled(enable);
-    ui->frameCount->setEnabled(enable);
-    ui->fps->setEnabled(enable);
-    ui->label->setEnabled(enable);
-    ui->label_2->setEnabled(enable);
+    bool hasAnim = (i != -1);
 
+    // Update current anim
+    m_currentAnim = hasAnim?
+                m_model->animModel()->anims().at(i)
+              : NULL;
+
+    // Enable / disable widgets
+    ui->namesView->setEnabled(hasAnim);
+    ui->timeLineView->setEnabled(hasAnim);
+    ui->frameCount->setEnabled(hasAnim);
+    ui->fps->setEnabled(hasAnim);
+    ui->label->setEnabled(hasAnim);
+    ui->label_2->setEnabled(hasAnim);
+
+    // Show the animation with the proxy
     m_rightProxy->showAnim(i);
 
-    if(i != -1)
+    // Update spinboxes
+    if(hasAnim)
     {
-        Anim *anim = m_model->animModel()->anims().at(i);
-        qDebug() << anim->name();
+        ui->frameCount->setValue(m_currentAnim->frameCount());
+        ui->fps->setValue(m_currentAnim->fps());
     }
 }
 
@@ -121,4 +133,16 @@ void TimeWidget::onCollapsed(const QModelIndex &proxyIndex)
 void TimeWidget::resetEditor()
 {
     openEditor(ui->timeLineView->currentIndex());
+}
+
+void TimeWidget::updateAnimFrameCount()
+{
+    int frameCount = ui->frameCount->value();
+    m_currentAnim->setFrameCount(frameCount);
+}
+
+void TimeWidget::updateAnimFps()
+{
+    int fps = ui->fps->value();
+    m_currentAnim->setFps(fps);
 }

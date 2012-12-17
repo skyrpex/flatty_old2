@@ -39,7 +39,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="frameCount"/>
+      <widget class="QSpinBox" name="frameCount">
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_2">
@@ -49,7 +53,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="fps"/>
+      <widget class="QSpinBox" name="fps">
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer">

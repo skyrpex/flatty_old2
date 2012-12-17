@@ -7,6 +7,7 @@
 namespace Ui {
 class TimeWidget;
 }
+class Anim;
 class JointModel;
 class JointDelegate;
 class JointProxyModel;
@@ -30,6 +31,8 @@ private slots:
     void onExpanded(const QModelIndex &proxyIndex);
     void onCollapsed(const QModelIndex &proxyIndex);
     void resetEditor();
+    void updateAnimFrameCount();
+    void updateAnimFps();
 
 private:
     Ui::TimeWidget *ui;
@@ -38,6 +41,7 @@ private:
     JointProxyModel *m_leftProxy;
     JointProxyModel *m_rightProxy;
     QModelIndex m_openEditorIndex;
+    Anim *m_currentAnim;
 };
 
 #endif // TIMEWIDGET_H
