@@ -22,25 +22,25 @@ MainWindow::MainWindow(QWidget *parent) :
 
     new Joint("Rack", m_model->root());
 
-    TimeWidget *tw = new TimeWidget(m_model);
-    AnimsWidget *aw = new AnimsWidget(m_model->animModel());
-    GraphicsWidget *gv = new GraphicsWidget(m_model);
+    TimeWidget *timeWidget = new TimeWidget(m_model);
+    AnimsWidget *animsWidget = new AnimsWidget(m_model->animModel());
+    GraphicsWidget *graphicsWidget = new GraphicsWidget(m_model);
 
-    connect(aw, SIGNAL(currentAnimChanged(int)), tw, SLOT(setCurrentAnim(int)));
-    connect(aw, SIGNAL(currentAnimChanged(int)), gv, SLOT(setCurrentAnim(int)));
-    connect(tw, SIGNAL(currentFrameChanged(int)), gv, SLOT(setCurrentFrame(int)));
+    connect(animsWidget, SIGNAL(currentAnimChanged(int)), timeWidget, SLOT(setCurrentAnim(int)));
+    connect(animsWidget, SIGNAL(currentAnimChanged(int)), graphicsWidget, SLOT(setCurrentAnim(int)));
+    connect(timeWidget, SIGNAL(currentFrameChanged(int)), graphicsWidget, SLOT(setCurrentFrame(int)));
 
-    QSplitter *hs = new QSplitter(this);
-    hs->addWidget(aw);
-    hs->addWidget(gv);
-    QSplitter *vs = new QSplitter(Qt::Vertical, this);
-    vs->addWidget(hs);
-    vs->addWidget(tw);
+    QSplitter *horizontalSplitter = new QSplitter(this);
+    horizontalSplitter->addWidget(animsWidget);
+    horizontalSplitter->addWidget(graphicsWidget);
+    QSplitter *verticalSplitter = new QSplitter(Qt::Vertical, this);
+    verticalSplitter->addWidget(horizontalSplitter);
+    verticalSplitter->addWidget(timeWidget);
 
-    QWidget *w = new QWidget(this);
-    setCentralWidget(w);
-    QVBoxLayout *l = new QVBoxLayout(w);
-    l->addWidget(vs);
+    QWidget *centralWidget = new QWidget(this);
+    setCentralWidget(centralWidget);
+    QVBoxLayout *layout = new QVBoxLayout(centralWidget);
+    layout->addWidget(verticalSplitter);
 }
 
 MainWindow::~MainWindow()
