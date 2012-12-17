@@ -23,7 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
     new Joint("Rack", m_model->root());
 
     TimeWidget *tw = new TimeWidget(m_model);
-    tw->setDisabled(true);
     AnimsWidget *aw = new AnimsWidget(m_model->animModel());
     GraphicsWidget *gv = new GraphicsWidget(m_model);
 

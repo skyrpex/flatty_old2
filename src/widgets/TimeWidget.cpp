@@ -66,6 +66,9 @@ TimeWidget::TimeWidget(JointModel *model, QWidget *parent) :
     connect(header, SIGNAL(currentFrameChanged(int)), m_delegate, SLOT(setCurrentFrame(int)));
     connect(header, SIGNAL(currentFrameChanged(int)), timeLineView->viewport(), SLOT(update()));
     connect(header, SIGNAL(currentFrameChanged(int)), SIGNAL(currentFrameChanged(int)));
+
+    // Initialize
+    setCurrentAnim(-1);
 }
 
 void TimeWidget::setCurrentAnim(int i)
