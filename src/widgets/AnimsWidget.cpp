@@ -2,7 +2,7 @@
 #include "model/AnimModel.h"
 #include "dialogs/AnimDialog.h"
 #include "model/Anim.h"
-#include <QTreeView>
+#include <QListView>
 #include <QVBoxLayout>
 #include <QToolBar>
 #include <QAction>
@@ -15,7 +15,7 @@
 AnimsWidget::AnimsWidget(AnimModel *model, QWidget *parent) :
     QWidget(parent),
     m_model(model),
-    m_view(new QTreeView(this))
+    m_view(new QListView(this))
 {
     m_view->setModel(model);
 

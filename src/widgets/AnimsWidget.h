@@ -5,7 +5,7 @@
 
 class AnimModel;
 class Anim;
-class QTreeView;
+class QListView;
 class QModelIndex;
 class QAction;
 
@@ -29,7 +29,7 @@ private:
     Anim *animFromUser();
 
     AnimModel *m_model;
-    QTreeView *m_view;
+    QListView *m_view;
     QAction *m_createAction;
     QAction *m_editAction;
     QAction *m_removeAction;
