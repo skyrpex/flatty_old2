@@ -1,7 +1,10 @@
 #include "CreateAnimCommand.h"
 #include "model/AnimModel.h"
 #include "model/Anim.h"
+#include "Application.h"
 #include <QDebug>
+
+const char * const CommandText = "Create Animation";
 
 CreateAnimCommand::CreateAnimCommand(AnimModel *model, Anim *anim) :
     m_model(model),
@@ -9,6 +12,7 @@ CreateAnimCommand::CreateAnimCommand(AnimModel *model, Anim *anim) :
 {
     Q_ASSERT(model);
     Q_ASSERT(anim);
+    setText(qApp->tr(CommandText));
 }
 
 void CreateAnimCommand::undo()

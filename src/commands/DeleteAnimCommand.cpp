@@ -1,7 +1,10 @@
 #include "DeleteAnimCommand.h"
 #include "model/AnimModel.h"
 #include "model/Anim.h"
+#include "Application.h"
 #include <QDebug>
+
+const char * const CommandText = "Delete Animation";
 
 DeleteAnimCommand::DeleteAnimCommand(AnimModel *model, Anim *anim) :
     m_model(model),
@@ -9,6 +12,7 @@ DeleteAnimCommand::DeleteAnimCommand(AnimModel *model, Anim *anim) :
 {
     Q_ASSERT(model);
     Q_ASSERT(anim);
+    setText(qApp->tr(CommandText));
 }
 
 void DeleteAnimCommand::undo()

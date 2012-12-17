@@ -1,5 +1,8 @@
 #include "EditAnimCommand.h"
 #include "model/Anim.h"
+#include "Application.h"
+
+const char * const CommandText = "Edit Animation";
 
 EditAnimCommand::EditAnimCommand(Anim *anim, QString name, int frameCount, int fps)
     : m_anim(anim),
@@ -10,6 +13,7 @@ EditAnimCommand::EditAnimCommand(Anim *anim, QString name, int frameCount, int f
       m_oldFrameCount(m_anim->frameCount()),
       m_oldFps(m_anim->fps())
 {
+    setText(qApp->tr(CommandText));
 }
 
 void EditAnimCommand::undo()
