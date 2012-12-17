@@ -79,6 +79,8 @@ void TimeWidget::setCurrentAnim(int i)
     ui->timeLineView->setEnabled(enable);
     ui->frameCount->setEnabled(enable);
     ui->fps->setEnabled(enable);
+    ui->label->setEnabled(enable);
+    ui->label_2->setEnabled(enable);
 
     m_rightProxy->showAnim(i);
 
