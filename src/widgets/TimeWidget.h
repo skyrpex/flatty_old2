@@ -4,10 +4,14 @@
 #include <QWidget>
 #include <QModelIndex>
 
+namespace Ui {
+class TimeWidget;
+}
 class JointModel;
 class JointDelegate;
 class JointProxyModel;
 class QTreeView;
+class QSpinBox;
 
 class TimeWidget : public QWidget
 {
@@ -28,14 +32,11 @@ private slots:
     void resetEditor();
 
 private:
-    QWidget *createUpperWidget(JointModel *model) const;
-    QWidget *createBottomWidget() const;
-
+    Ui::TimeWidget *ui;
+    JointModel *m_model;
     JointDelegate *m_delegate;
     JointProxyModel *m_leftProxy;
     JointProxyModel *m_rightProxy;
-    QTreeView *m_leftView;
-    QTreeView *m_rightView;
     QModelIndex m_openEditorIndex;
 };
 

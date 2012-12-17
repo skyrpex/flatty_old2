@@ -1,89 +1,46 @@
 #include "TimeWidget.h"
+#include "ui_TimeWidget.h"
 #include "model/JointModel.h"
 #include "model/AnimModel.h"
 #include "widgets/time/JointProxyModel.h"
 #include "widgets/time/JointDelegate.h"
 #include "widgets/time/JointHeaderView.h"
+#include "model/Anim.h"
 #include <QTreeView>
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QScrollbar>
 #include <QToolBar>
+#include <QDebug>
+#include <QSpinBox>
 
 TimeWidget::TimeWidget(JointModel *model, QWidget *parent) :
     QWidget(parent),
+    ui(new Ui::TimeWidget),
+    m_model(model),
     m_delegate(new JointDelegate(this)),
     m_leftProxy(new JointProxyModel(model, this)),
-    m_rightProxy(new JointProxyModel(model, this)),
-    m_leftView(new QTreeView(this)),
-    m_rightView(new QTreeView(this))
+    m_rightProxy(new JointProxyModel(model, this))
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setMargin(0);
-    layout->setSpacing(0);
-    layout->addWidget(createUpperWidget(model));
-    layout->addWidget(createBottomWidget());
-}
+    ui->setupUi(this);
 
-void TimeWidget::setCurrentAnim(int i)
-{
-    setEnabled(i != -1);
-    m_rightProxy->showAnim(i);
-}
-
-void TimeWidget::openEditor(const QModelIndex &index)
-{
-    if(m_openEditorIndex.isValid())
-    {
-        m_rightView->closePersistentEditor(m_openEditorIndex);
-        m_openEditorIndex = QModelIndex();
-    }
-
-    if(index.column() != JointModel::NameColumn)
-    {
-        m_rightView->openPersistentEditor(index);
-        m_openEditorIndex = index;
-    }
-}
-
-void TimeWidget::onExpanded(const QModelIndex &proxyIndex)
-{
-    QModelIndex sourceIndex = m_leftProxy->mapToSource(proxyIndex);
-    m_rightView->expand(m_rightProxy->mapFromSource(sourceIndex));
-}
-
-void TimeWidget::onCollapsed(const QModelIndex &proxyIndex)
-{
-    QModelIndex sourceIndex = m_leftProxy->mapToSource(proxyIndex);
-    m_rightView->collapse(m_rightProxy->mapFromSource(sourceIndex));
-}
-
-void TimeWidget::resetEditor()
-{
-    openEditor(m_rightView->currentIndex());
-}
-
-QWidget *TimeWidget::createUpperWidget(JointModel *model) const
-{
-    // Create splitter
-    QSplitter *splitter = new QSplitter();
-    splitter->addWidget(m_leftView);
-    splitter->addWidget(m_rightView);
+    QTreeView *namesView = ui->namesView;
+    QTreeView *timeLineView = ui->timeLineView;
 
     // Sync views
-    connect(m_leftView->verticalScrollBar(), SIGNAL(valueChanged(int)), m_rightView->verticalScrollBar(), SLOT(setValue(int)));
-    connect(m_rightView->verticalScrollBar(), SIGNAL(valueChanged(int)), m_leftView->verticalScrollBar(), SLOT(setValue(int)));
-    connect(m_leftView, SIGNAL(expanded(QModelIndex)), SLOT(onExpanded(QModelIndex)));
-    connect(m_leftView, SIGNAL(collapsed(QModelIndex)), SLOT(onCollapsed(QModelIndex)));
+    connect(namesView->verticalScrollBar(), SIGNAL(valueChanged(int)), timeLineView->verticalScrollBar(), SLOT(setValue(int)));
+    connect(timeLineView->verticalScrollBar(), SIGNAL(valueChanged(int)), namesView->verticalScrollBar(), SLOT(setValue(int)));
+    connect(namesView, SIGNAL(expanded(QModelIndex)), SLOT(onExpanded(QModelIndex)));
+    connect(namesView, SIGNAL(collapsed(QModelIndex)), SLOT(onCollapsed(QModelIndex)));
 
     // Configure animations view
     m_leftProxy->showAnims(false);
 
-    m_leftView->setModel(m_leftProxy);
-    m_leftView->setItemDelegate(m_delegate);
-    m_leftView->setHeader(new JointHeaderView(false));
-    m_leftView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_leftView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    namesView->setModel(m_leftProxy);
+    namesView->setItemDelegate(m_delegate);
+    namesView->setHeader(new JointHeaderView(false));
+    namesView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    namesView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     // Configure time line view
     JointHeaderView *header = new JointHeaderView(true);
@@ -91,31 +48,66 @@ QWidget *TimeWidget::createUpperWidget(JointModel *model) const
     m_rightProxy->showVisibleColumn(false);
     m_rightProxy->showAnim(0);
 
-    m_rightView->setModel(m_rightProxy);
-    m_rightView->setItemDelegate(m_delegate);
-    m_rightView->setHeader(header);
-    m_rightView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    m_rightView->hideColumn(JointModel::NameColumn);
-    m_rightView->setAutoScroll(false);
-    m_rightView->setMouseTracking(true);
-    m_rightView->setItemsExpandable(false);
+    timeLineView->setModel(m_rightProxy);
+    timeLineView->setItemDelegate(m_delegate);
+    timeLineView->setHeader(header);
+    timeLineView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    timeLineView->hideColumn(JointModel::NameColumn);
+    timeLineView->setAutoScroll(false);
+    timeLineView->setMouseTracking(true);
+    timeLineView->setItemsExpandable(false);
 
-    connect(m_rightView, SIGNAL(entered(QModelIndex)), SLOT(openEditor(QModelIndex)));
+    connect(timeLineView, SIGNAL(entered(QModelIndex)), SLOT(openEditor(QModelIndex)));
     connect(model->animModel(), SIGNAL(rowsInserted(QModelIndex, int, int)), SLOT(resetEditor()));
     connect(model->animModel(), SIGNAL(rowsRemoved(QModelIndex, int, int)), SLOT(resetEditor()));
     connect(model->animModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(resetEditor()));
 
     connect(m_delegate, SIGNAL(currentFrameChanged(int)), header, SLOT(setCurrentFrame(int)));
     connect(header, SIGNAL(currentFrameChanged(int)), m_delegate, SLOT(setCurrentFrame(int)));
-    connect(header, SIGNAL(currentFrameChanged(int)), m_rightView->viewport(), SLOT(update()));
+    connect(header, SIGNAL(currentFrameChanged(int)), timeLineView->viewport(), SLOT(update()));
     connect(header, SIGNAL(currentFrameChanged(int)), SIGNAL(currentFrameChanged(int)));
-
-    // Return splitter
-    return splitter;
 }
 
-QWidget *TimeWidget::createBottomWidget() const
+void TimeWidget::setCurrentAnim(int i)
 {
-    QToolBar *toolBar = new QToolBar();
-    return toolBar;
+    setEnabled(i != -1);
+    m_rightProxy->showAnim(i);
+
+    if(i != -1)
+    {
+        Anim *anim = m_model->animModel()->anims().at(i);
+        qDebug() << anim->name();
+    }
+}
+
+void TimeWidget::openEditor(const QModelIndex &index)
+{
+    if(m_openEditorIndex.isValid())
+    {
+        ui->timeLineView->closePersistentEditor(m_openEditorIndex);
+        m_openEditorIndex = QModelIndex();
+    }
+
+    if(index.column() != JointModel::NameColumn)
+    {
+        ui->timeLineView->openPersistentEditor(index);
+        m_openEditorIndex = index;
+    }
+}
+
+void TimeWidget::onExpanded(const QModelIndex &proxyIndex)
+{
+    QModelIndex sourceIndex = m_leftProxy->mapToSource(proxyIndex);
+    ui->timeLineView->expand(m_rightProxy->mapFromSource(sourceIndex));
+}
+
+void TimeWidget::onCollapsed(const QModelIndex &proxyIndex)
+{
+    QModelIndex sourceIndex = m_leftProxy->mapToSource(proxyIndex);
+    ui->timeLineView->collapse(m_rightProxy->mapFromSource(sourceIndex));
+}
+
+void TimeWidget::resetEditor()
+{
+    openEditor(ui->timeLineView->currentIndex());
 }

@@ -61,4 +61,5 @@ RESOURCES += \
 
 FORMS += \
     dialogs/AnimDialog.ui \
-    MainWindow.ui
+    MainWindow.ui \
+    widgets/TimeWidget.ui
