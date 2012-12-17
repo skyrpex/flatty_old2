@@ -33,7 +33,7 @@ TimeWidget::TimeWidget(JointModel *model, QWidget *parent) :
     connect(namesView, SIGNAL(expanded(QModelIndex)), SLOT(onExpanded(QModelIndex)));
     connect(namesView, SIGNAL(collapsed(QModelIndex)), SLOT(onCollapsed(QModelIndex)));
 
-    // Configure animations view
+    // Configure names view
     m_leftProxy->showAnims(false);
 
     namesView->setModel(m_leftProxy);
