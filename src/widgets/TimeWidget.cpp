@@ -5,7 +5,9 @@
 #include "widgets/time/JointProxyModel.h"
 #include "widgets/time/JointDelegate.h"
 #include "widgets/time/JointHeaderView.h"
+#include "commands/AnimFpsEditCommand.h"
 #include "model/Anim.h"
+#include "Application.h"
 #include <QTreeView>
 #include <QVBoxLayout>
 #include <QSplitter>
@@ -69,7 +71,7 @@ TimeWidget::TimeWidget(JointModel *model, QWidget *parent) :
 
     // Configure spinboxes
     connect(ui->frameCount, SIGNAL(editingFinished()), SLOT(updateAnimFrameCount()));
-    connect(ui->fps, SIGNAL(editingFinished()), SLOT(updateAnimFps()));
+    connect(ui->fps, SIGNAL(valueChanged(int)), SLOT(setAnimFps(int)));
 
     // Initialize
     setCurrentAnim(-1);
@@ -141,8 +143,8 @@ void TimeWidget::updateAnimFrameCount()
     m_currentAnim->setFrameCount(frameCount);
 }
 
-void TimeWidget::updateAnimFps()
+void TimeWidget::setAnimFps(int fps)
 {
-    int fps = ui->fps->value();
-    m_currentAnim->setFps(fps);
+    AnimFpsEditCommand *command = new AnimFpsEditCommand(m_currentAnim, fps);
+    qApp->undoStack()->push(command);
 }

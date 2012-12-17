@@ -32,7 +32,7 @@ private slots:
     void onCollapsed(const QModelIndex &proxyIndex);
     void resetEditor();
     void updateAnimFrameCount();
-    void updateAnimFps();
+    void setAnimFps(int fps);
 
 private:
     Ui::TimeWidget *ui;
