@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QScrollbar>
+#include <QToolBar>
 
 TimeWidget::TimeWidget(JointModel *model, QWidget *parent) :
     QWidget(parent),
@@ -17,56 +18,11 @@ TimeWidget::TimeWidget(JointModel *model, QWidget *parent) :
     m_leftView(new QTreeView(this)),
     m_rightView(new QTreeView(this))
 {
-    QSplitter *splitter = new QSplitter(this);
-    connect(m_leftView->verticalScrollBar(), SIGNAL(valueChanged(int)), m_rightView->verticalScrollBar(), SLOT(setValue(int)));
-    connect(m_rightView->verticalScrollBar(), SIGNAL(valueChanged(int)), m_leftView->verticalScrollBar(), SLOT(setValue(int)));
-    connect(m_leftView, SIGNAL(expanded(QModelIndex)), SLOT(onExpanded(QModelIndex)));
-    connect(m_leftView, SIGNAL(collapsed(QModelIndex)), SLOT(onCollapsed(QModelIndex)));
-
-    {
-        m_leftProxy->showAnims(false);
-
-        m_leftView->setModel(m_leftProxy);
-        m_leftView->setItemDelegate(m_delegate);
-        m_leftView->setHeader(new JointHeaderView(false, this));
-        m_leftView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        m_leftView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-
-        splitter->addWidget(m_leftView);
-    }
-
-    {
-        JointHeaderView *header = new JointHeaderView(true, this);
-
-        m_rightProxy->showVisibleColumn(false);
-        m_rightProxy->showAnim(0);
-
-        m_rightView->setModel(m_rightProxy);
-        m_rightView->setItemDelegate(m_delegate);
-        m_rightView->setHeader(header);
-        m_rightView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        m_rightView->hideColumn(JointModel::NameColumn);
-        m_rightView->setAutoScroll(false);
-        m_rightView->setMouseTracking(true);
-        m_rightView->setItemsExpandable(false);
-
-        connect(m_rightView, SIGNAL(entered(QModelIndex)), SLOT(openEditor(QModelIndex)));
-        connect(model->animModel(), SIGNAL(rowsInserted(QModelIndex, int, int)), SLOT(resetEditor()));
-        connect(model->animModel(), SIGNAL(rowsRemoved(QModelIndex, int, int)), SLOT(resetEditor()));
-        connect(model->animModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(resetEditor()));
-
-        connect(m_delegate, SIGNAL(currentFrameChanged(int)), header, SLOT(setCurrentFrame(int)));
-        connect(header, SIGNAL(currentFrameChanged(int)), m_delegate, SLOT(setCurrentFrame(int)));
-        connect(header, SIGNAL(currentFrameChanged(int)), m_rightView->viewport(), SLOT(update()));
-        connect(header, SIGNAL(currentFrameChanged(int)), SIGNAL(currentFrameChanged(int)));
-
-        splitter->addWidget(m_rightView);
-    }
-
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     layout->setSpacing(0);
-    layout->addWidget(splitter);
+    layout->addWidget(createUpperWidget(model));
+    layout->addWidget(createBottomWidget());
 }
 
 void TimeWidget::setCurrentAnim(int i)
@@ -105,4 +61,61 @@ void TimeWidget::onCollapsed(const QModelIndex &proxyIndex)
 void TimeWidget::resetEditor()
 {
     openEditor(m_rightView->currentIndex());
+}
+
+QWidget *TimeWidget::createUpperWidget(JointModel *model) const
+{
+    // Create splitter
+    QSplitter *splitter = new QSplitter();
+    splitter->addWidget(m_leftView);
+    splitter->addWidget(m_rightView);
+
+    // Sync views
+    connect(m_leftView->verticalScrollBar(), SIGNAL(valueChanged(int)), m_rightView->verticalScrollBar(), SLOT(setValue(int)));
+    connect(m_rightView->verticalScrollBar(), SIGNAL(valueChanged(int)), m_leftView->verticalScrollBar(), SLOT(setValue(int)));
+    connect(m_leftView, SIGNAL(expanded(QModelIndex)), SLOT(onExpanded(QModelIndex)));
+    connect(m_leftView, SIGNAL(collapsed(QModelIndex)), SLOT(onCollapsed(QModelIndex)));
+
+    // Configure animations view
+    m_leftProxy->showAnims(false);
+
+    m_leftView->setModel(m_leftProxy);
+    m_leftView->setItemDelegate(m_delegate);
+    m_leftView->setHeader(new JointHeaderView(false));
+    m_leftView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_leftView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    // Configure time line view
+    JointHeaderView *header = new JointHeaderView(true);
+
+    m_rightProxy->showVisibleColumn(false);
+    m_rightProxy->showAnim(0);
+
+    m_rightView->setModel(m_rightProxy);
+    m_rightView->setItemDelegate(m_delegate);
+    m_rightView->setHeader(header);
+    m_rightView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    m_rightView->hideColumn(JointModel::NameColumn);
+    m_rightView->setAutoScroll(false);
+    m_rightView->setMouseTracking(true);
+    m_rightView->setItemsExpandable(false);
+
+    connect(m_rightView, SIGNAL(entered(QModelIndex)), SLOT(openEditor(QModelIndex)));
+    connect(model->animModel(), SIGNAL(rowsInserted(QModelIndex, int, int)), SLOT(resetEditor()));
+    connect(model->animModel(), SIGNAL(rowsRemoved(QModelIndex, int, int)), SLOT(resetEditor()));
+    connect(model->animModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(resetEditor()));
+
+    connect(m_delegate, SIGNAL(currentFrameChanged(int)), header, SLOT(setCurrentFrame(int)));
+    connect(header, SIGNAL(currentFrameChanged(int)), m_delegate, SLOT(setCurrentFrame(int)));
+    connect(header, SIGNAL(currentFrameChanged(int)), m_rightView->viewport(), SLOT(update()));
+    connect(header, SIGNAL(currentFrameChanged(int)), SIGNAL(currentFrameChanged(int)));
+
+    // Return splitter
+    return splitter;
+}
+
+QWidget *TimeWidget::createBottomWidget() const
+{
+    QToolBar *toolBar = new QToolBar();
+    return toolBar;
 }

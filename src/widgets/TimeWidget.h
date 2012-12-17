@@ -28,6 +28,9 @@ private slots:
     void resetEditor();
 
 private:
+    QWidget *createUpperWidget(JointModel *model) const;
+    QWidget *createBottomWidget() const;
+
     JointDelegate *m_delegate;
     JointProxyModel *m_leftProxy;
     JointProxyModel *m_rightProxy;
