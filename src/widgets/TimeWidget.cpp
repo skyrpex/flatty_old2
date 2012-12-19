@@ -15,6 +15,12 @@
 #include <QToolBar>
 #include <QDebug>
 #include <QSpinBox>
+#include <QInputDialog>
+#include <limits>
+
+const char * const OneFrameCountButtonText = "1 frame";
+const char * const FrameCountButtonText = "%1 frames";
+const char * const FpsButtonText = "%1 fps";
 
 TimeWidget::TimeWidget(JointModel *model, QWidget *parent) :
     QWidget(parent),
@@ -69,9 +75,9 @@ TimeWidget::TimeWidget(JointModel *model, QWidget *parent) :
     connect(header, SIGNAL(currentFrameChanged(int)), timeLineView->viewport(), SLOT(update()));
     connect(header, SIGNAL(currentFrameChanged(int)), SIGNAL(currentFrameChanged(int)));
 
-    // Configure spinboxes
-    connect(ui->frameCount, SIGNAL(editingFinished()), SLOT(updateAnimFrameCount()));
-    connect(ui->fps, SIGNAL(valueChanged(int)), SLOT(setAnimFps(int)));
+    // Configure push buttons
+    connect(ui->frameCount, SIGNAL(pressed()), SLOT(showFrameCountDialog()));
+    connect(ui->fps, SIGNAL(pressed()), SLOT(showFpsDialog()));
 
     // Initialize
     setCurrentAnim(-1);
@@ -91,8 +97,6 @@ void TimeWidget::setCurrentAnim(int i)
     ui->timeLineView->setEnabled(hasAnim);
     ui->frameCount->setEnabled(hasAnim);
     ui->fps->setEnabled(hasAnim);
-    ui->label->setEnabled(hasAnim);
-    ui->label_2->setEnabled(hasAnim);
 
     // Show the animation with the proxy
     m_rightProxy->showAnim(i);
@@ -100,8 +104,8 @@ void TimeWidget::setCurrentAnim(int i)
     // Update spinboxes
     if(hasAnim)
     {
-        ui->frameCount->setValue(m_currentAnim->frameCount());
-        ui->fps->setValue(m_currentAnim->fps());
+        updateFrameCountButton();
+        updateFpsButton();
     }
 }
 
@@ -137,14 +141,53 @@ void TimeWidget::resetEditor()
     openEditor(ui->timeLineView->currentIndex());
 }
 
-void TimeWidget::updateAnimFrameCount()
+void TimeWidget::showFrameCountDialog()
 {
-    int frameCount = ui->frameCount->value();
-    m_currentAnim->setFrameCount(frameCount);
+    QString title = tr("title");
+    QString label = tr("label");
+    int value = m_currentAnim->frameCount();
+    int minValue = 1;
+    int maxValue = std::numeric_limits<int>::max();
+    int step = 1;
+    bool ok;
+    int result = QInputDialog::getInt(this, title, label, value, minValue, maxValue, step, &ok);
+    if(!ok)
+        return;
+
+    m_currentAnim->setFrameCount(result);
+    updateFrameCountButton();
 }
 
-void TimeWidget::setAnimFps(int fps)
+void TimeWidget::showFpsDialog()
 {
-    AnimFpsEditCommand *command = new AnimFpsEditCommand(m_currentAnim, fps);
+    QString title = tr("title");
+    QString label = tr("label");
+    int value = m_currentAnim->fps();
+    int minValue = 1;
+    int maxValue = std::numeric_limits<int>::max();
+    int step = 1;
+    bool ok;
+    int result = QInputDialog::getInt(this, title, label, value, minValue, maxValue, step, &ok);
+    if(!ok)
+        return;
+
+    // Change fps
+    AnimFpsEditCommand *command = new AnimFpsEditCommand(m_currentAnim, result);
     qApp->undoStack()->push(command);
+    updateFpsButton();
+}
+
+void TimeWidget::updateFrameCountButton()
+{
+    int frameCount = m_currentAnim->frameCount();
+    const char * const text = (frameCount == 1)?
+                OneFrameCountButtonText
+              : FrameCountButtonText;
+    ui->frameCount->setText(tr(text).arg(frameCount));
+}
+
+void TimeWidget::updateFpsButton()
+{
+    int fps = m_currentAnim->fps();
+    ui->fps->setText(tr(FpsButtonText).arg(fps));
 }

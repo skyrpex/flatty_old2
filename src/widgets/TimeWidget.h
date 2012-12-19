@@ -31,10 +31,15 @@ private slots:
     void onExpanded(const QModelIndex &proxyIndex);
     void onCollapsed(const QModelIndex &proxyIndex);
     void resetEditor();
-    void updateAnimFrameCount();
-    void setAnimFps(int fps);
+//    void updateAnimFrameCount();
+//    void setAnimFps(int fps);
+    void showFrameCountDialog();
+    void showFpsDialog();
 
 private:
+    void updateFrameCountButton();
+    void updateFpsButton();
+
     Ui::TimeWidget *ui;
     JointModel *m_model;
     JointDelegate *m_delegate;
