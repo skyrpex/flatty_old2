@@ -19,8 +19,12 @@ MainWindow::MainWindow(QWidget *parent) :
     m_model(new JointModel(this))
 {
     ui->setupUi(this);
-    ui->menuEdit->addAction(qApp->undoStack()->createUndoAction(this));
-    ui->menuEdit->addAction(qApp->undoStack()->createRedoAction(this));
+    QAction *undoAction = qApp->undoStack()->createUndoAction(this);
+    undoAction->setShortcut(QKeySequence("Ctrl+Z"));
+    QAction *redoAction = qApp->undoStack()->createRedoAction(this);
+    redoAction->setShortcut(QKeySequence("Ctrl+Y"));
+    ui->menuEdit->addAction(undoAction);
+    ui->menuEdit->addAction(redoAction);
 
     new Joint("Rack", m_model->root());
 
