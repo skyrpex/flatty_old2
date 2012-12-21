@@ -27,9 +27,9 @@ GraphicsWidget::GraphicsWidget(JointModel *model, QWidget *parent) :
     m_view->scene()->addItem(m_root);
 }
 
-void GraphicsWidget::setCurrentAnim(int i)
+void GraphicsWidget::setCurrentAnim(Anim *anim)
 {
-    m_currentAnim = m_model->animModel()->anims().value(i);
+    m_currentAnim = anim;
     setCurrentFrame(0);
 }
 

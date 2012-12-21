@@ -82,19 +82,16 @@ TimeWidget::TimeWidget(AnimsWidget *animsWidget, JointModel *model, int stretchF
     connect(ui->fps, SIGNAL(pressed()), SLOT(showFpsDialog()));
 
     // Initialize
-    setCurrentAnim(-1);
+    setCurrentAnim(NULL);
 }
 
-void TimeWidget::setCurrentAnim(int i)
+void TimeWidget::setCurrentAnim(Anim *anim)
 {
-    bool hasAnim = (i != -1);
-
-    // Update current anim
-    m_currentAnim = hasAnim?
-                m_model->animModel()->anims().at(i)
-              : NULL;
+    /*// Update current anim
+    m_currentAnim = anim;
 
     // Enable / disable widgets
+    bool hasAnim = (anim != NULL);
     ui->namesView->setEnabled(hasAnim);
     ui->timeLineView->setEnabled(hasAnim);
     ui->frameCount->setEnabled(hasAnim);
@@ -108,7 +105,7 @@ void TimeWidget::setCurrentAnim(int i)
     {
         updateFrameCountButton();
         updateFpsButton();
-    }
+    }*/
 }
 
 void TimeWidget::openEditor(const QModelIndex &index)

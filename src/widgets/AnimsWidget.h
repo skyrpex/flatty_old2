@@ -16,11 +16,10 @@ public:
     explicit AnimsWidget(AnimModel *model, QWidget *parent = 0);
 
 public slots:
-    void setCurrentAnim(int i);
     void setCurrentAnim(Anim *anim);
 
 signals:
-    void currentAnimChanged(int i);
+    void currentAnimChanged(Anim *anim);
 
 private slots:
     void createAnim();

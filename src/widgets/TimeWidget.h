@@ -25,7 +25,7 @@ signals:
     void currentFrameChanged(int frame);
 
 public slots:
-    void setCurrentAnim(int i);
+    void setCurrentAnim(Anim *anim);
 
 private slots:
     void openEditor(const QModelIndex &index);

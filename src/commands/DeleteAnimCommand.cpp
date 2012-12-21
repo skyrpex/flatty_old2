@@ -22,7 +22,7 @@ DeleteAnimCommand::DeleteAnimCommand(AnimModel *model, Anim *anim, AnimsWidget *
 void DeleteAnimCommand::undo()
 {
     m_model->insertAnim(m_index, m_anim);
-    m_widget->setCurrentAnim(m_index);
+    m_widget->setCurrentAnim(m_anim);
 }
 
 void DeleteAnimCommand::redo()

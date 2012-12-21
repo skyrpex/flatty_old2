@@ -28,8 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
     TimeWidget *timeWidget = new TimeWidget(animsWidget, m_model, StrecthFactor);
     GraphicsWidget *graphicsWidget = new GraphicsWidget(m_model);
 
-    connect(animsWidget, SIGNAL(currentAnimChanged(int)), timeWidget, SLOT(setCurrentAnim(int)));
-    connect(animsWidget, SIGNAL(currentAnimChanged(int)), graphicsWidget, SLOT(setCurrentAnim(int)));
+    connect(animsWidget, SIGNAL(currentAnimChanged(Anim*)), timeWidget, SLOT(setCurrentAnim(Anim*)));
+    connect(animsWidget, SIGNAL(currentAnimChanged(Anim*)), graphicsWidget, SLOT(setCurrentAnim(Anim*)));
     connect(timeWidget, SIGNAL(currentFrameChanged(int)), graphicsWidget, SLOT(setCurrentFrame(int)));
 
     QSplitter *smallVerticalSplitter = new QSplitter(Qt::Vertical);

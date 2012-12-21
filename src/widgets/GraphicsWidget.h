@@ -17,7 +17,7 @@ public:
 signals:
     
 public slots:
-    void setCurrentAnim(int i);
+    void setCurrentAnim(Anim *anim);
     void setCurrentFrame(int frame);
     
 private:

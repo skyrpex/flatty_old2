@@ -37,22 +37,17 @@ AnimsWidget::AnimsWidget(AnimModel *model, QWidget *parent) :
     updateActions();
 }
 
-void AnimsWidget::setCurrentAnim(int i)
-{
-    QModelIndex index = m_model->index(i, 0, QModelIndex());
-    m_view->setCurrentIndex(index);
-}
-
 void AnimsWidget::setCurrentAnim(Anim *anim)
 {
-    int i = m_model->anims().indexOf(anim);
-
-    setCurrentAnim(i);
+    int row = m_model->anims().indexOf(anim);
+    QModelIndex index = m_model->index(row, 0, QModelIndex());
+    m_view->setCurrentIndex(index);
 }
 
 void AnimsWidget::onCurrentRowChanged(const QModelIndex &index)
 {
-    emit currentAnimChanged(index.row());
+    Anim *anim = static_cast<Anim *>(index.internalPointer());
+    emit currentAnimChanged(anim);
 }
 
 Anim *AnimsWidget::animFromUser()
