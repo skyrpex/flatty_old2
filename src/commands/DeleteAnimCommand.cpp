@@ -1,12 +1,14 @@
 #include "DeleteAnimCommand.h"
 #include "model/AnimModel.h"
 #include "model/Anim.h"
+#include "widgets/AnimsWidget.h"
 #include "Application.h"
 #include <QDebug>
 
 const char * const CommandText = "Delete Animation";
 
-DeleteAnimCommand::DeleteAnimCommand(AnimModel *model, Anim *anim) :
+DeleteAnimCommand::DeleteAnimCommand(AnimModel *model, Anim *anim, AnimsWidget *widget) :
+    m_widget(widget),
     m_model(model),
     m_anim(anim)
 {
@@ -18,6 +20,7 @@ DeleteAnimCommand::DeleteAnimCommand(AnimModel *model, Anim *anim) :
 void DeleteAnimCommand::undo()
 {
     m_model->addAnim(m_anim);
+    m_widget->setCurrentAnim(m_anim);
 }
 
 void DeleteAnimCommand::redo()
@@ -26,5 +29,4 @@ void DeleteAnimCommand::redo()
 
     Q_ASSERT(index != -1);
     m_model->takeAnim(index);
-
 }

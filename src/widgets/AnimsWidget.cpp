@@ -43,6 +43,13 @@ void AnimsWidget::setCurrentAnim(int i)
     m_view->setCurrentIndex(index);
 }
 
+void AnimsWidget::setCurrentAnim(Anim *anim)
+{
+    int i = m_model->anims().indexOf(anim);
+
+    setCurrentAnim(i);
+}
+
 void AnimsWidget::onCurrentRowChanged(const QModelIndex &index)
 {
     emit currentAnimChanged(index.row());
@@ -63,7 +70,7 @@ void AnimsWidget::createAnim()
     if(!anim)
         return;
 
-    CreateAnimCommand *command = new CreateAnimCommand(m_model, anim);;
+    CreateAnimCommand *command = new CreateAnimCommand(m_model, anim, this);
     qApp->undoStack()->push(command);
 
     // Set the new anim as current index
@@ -75,7 +82,7 @@ void AnimsWidget::createAnim()
 void AnimsWidget::removeAnim()
 {
     Anim *anim = static_cast<Anim *>(m_view->currentIndex().internalPointer());
-    DeleteAnimCommand *command = new DeleteAnimCommand(m_model, anim);
+    DeleteAnimCommand *command = new DeleteAnimCommand(m_model, anim, this);
     qApp->undoStack()->push(command);
 }
 

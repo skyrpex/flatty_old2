@@ -14,18 +14,16 @@ FpsCommand::FpsCommand(Anim *anim, int fps, AnimsWidget *widget)
       m_oldFps(m_anim->fps())
 {
     setText(qApp->tr(CommandText));
-
-    m_index = m_anim->model()->anims().indexOf(m_anim);
 }
 
 void FpsCommand::undo()
 {
     m_anim->setFps(m_oldFps);
-    m_widget->setCurrentAnim(m_index);
+    m_widget->setCurrentAnim(m_anim);
 }
 
 void FpsCommand::redo()
 {
     m_anim->setFps(m_fps);
-    m_widget->setCurrentAnim(m_index);
+    m_widget->setCurrentAnim(m_anim);
 }

@@ -5,16 +5,18 @@
 
 class AnimModel;
 class Anim;
+class AnimsWidget;
 
 class DeleteAnimCommand : public QUndoCommand
 {
 public:
-    DeleteAnimCommand(AnimModel *model, Anim *anim);
+    DeleteAnimCommand(AnimModel *model, Anim *anim, AnimsWidget *widget);
 
     void undo();
     void redo();
 
 private:
+    AnimsWidget *m_widget;
     AnimModel *m_model;
     Anim *m_anim;
 };

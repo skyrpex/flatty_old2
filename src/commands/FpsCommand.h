@@ -17,7 +17,6 @@ public:
 private:
     AnimsWidget *m_widget;
     Anim *m_anim;
-    int m_index;
     int m_fps;
     int m_oldFps;
 };
