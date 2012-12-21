@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     Application a(argc, argv);
 
     MainWindow w;
-    w.show();
+    w.showMaximized();
 ////    KeyFrames k;
 ////    KeyFramesEditor e;
 ////    e.setData(k.data, 20, 4);
