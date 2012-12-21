@@ -87,7 +87,7 @@ TimeWidget::TimeWidget(AnimsWidget *animsWidget, JointModel *model, int stretchF
 
 void TimeWidget::setCurrentAnim(Anim *anim)
 {
-    /*// Update current anim
+    // Update current anim
     m_currentAnim = anim;
 
     // Enable / disable widgets
@@ -98,6 +98,7 @@ void TimeWidget::setCurrentAnim(Anim *anim)
     ui->fps->setEnabled(hasAnim);
 
     // Show the animation with the proxy
+    int i = m_model->animModel()->anims().indexOf(m_currentAnim);
     m_rightProxy->showAnim(i);
 
     // Update spinboxes
@@ -105,7 +106,7 @@ void TimeWidget::setCurrentAnim(Anim *anim)
     {
         updateFrameCountButton();
         updateFpsButton();
-    }*/
+    }
 }
 
 void TimeWidget::openEditor(const QModelIndex &index)
@@ -142,6 +143,8 @@ void TimeWidget::resetEditor()
 
 void TimeWidget::showFrameCountDialog()
 {
+    Q_ASSERT(m_currentAnim);
+
     QString title = tr("title");
     QString label = tr("label");
     int value = m_currentAnim->frameCount();
@@ -159,6 +162,8 @@ void TimeWidget::showFrameCountDialog()
 
 void TimeWidget::showFpsDialog()
 {
+    Q_ASSERT(m_currentAnim);
+
     QString title = tr("title");
     QString label = tr("label");
     int value = m_currentAnim->fps();
@@ -178,6 +183,8 @@ void TimeWidget::showFpsDialog()
 
 void TimeWidget::updateFrameCountButton()
 {
+    Q_ASSERT(m_currentAnim);
+
     int frameCount = m_currentAnim->frameCount();
     const char * const frameCountText = (frameCount == 1)?
                 OneFrameCountButtonText
@@ -188,6 +195,8 @@ void TimeWidget::updateFrameCountButton()
 
 void TimeWidget::updateFpsButton()
 {
+    Q_ASSERT(m_currentAnim);
+
     int fps = m_currentAnim->fps();
     QString text = tr(FpsButtonText).arg(fps);
     ui->fps->setText(text);
