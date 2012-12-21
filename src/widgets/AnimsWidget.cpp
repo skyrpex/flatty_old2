@@ -39,7 +39,7 @@ AnimsWidget::AnimsWidget(AnimModel *model, QWidget *parent) :
 
 void AnimsWidget::setCurrentAnim(int i)
 {
-    QModelIndex index = m_view->indexAt(QPoint(i, 0));
+    QModelIndex index = m_model->index(i, 0, QModelIndex());
     m_view->setCurrentIndex(index);
 }
 
