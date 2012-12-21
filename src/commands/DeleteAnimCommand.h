@@ -19,6 +19,7 @@ private:
     AnimsWidget *m_widget;
     AnimModel *m_model;
     Anim *m_anim;
+    int m_index;
 };
 
 #endif // DELETEANIMCOMMAND_H

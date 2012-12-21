@@ -15,18 +15,17 @@ DeleteAnimCommand::DeleteAnimCommand(AnimModel *model, Anim *anim, AnimsWidget *
     Q_ASSERT(model);
     Q_ASSERT(anim);
     setText(qApp->tr(CommandText));
+
+    m_index = model->anims().indexOf(anim);
 }
 
 void DeleteAnimCommand::undo()
 {
-    m_model->addAnim(m_anim);
-    m_widget->setCurrentAnim(m_anim);
+    m_model->insertAnim(m_index, m_anim);
+    m_widget->setCurrentAnim(m_index);
 }
 
 void DeleteAnimCommand::redo()
 {
-    int index = m_model->anims().indexOf(m_anim);
-
-    Q_ASSERT(index != -1);
-    m_model->takeAnim(index);
+    m_model->takeAnim(m_index);
 }
