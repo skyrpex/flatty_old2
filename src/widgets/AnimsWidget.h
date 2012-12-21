@@ -15,12 +15,14 @@ class AnimsWidget : public QWidget
 public:
     explicit AnimsWidget(AnimModel *model, QWidget *parent = 0);
 
+public slots:
+    void setCurrentAnim(int i);
+
 signals:
     void currentAnimChanged(int i);
 
 private slots:
     void createAnim();
-    void editAnim();
     void removeAnim();
     void updateActions();
     void onCurrentRowChanged(const QModelIndex &index);
@@ -31,7 +33,6 @@ private:
     AnimModel *m_model;
     QListView *m_view;
     QAction *m_createAction;
-    QAction *m_editAction;
     QAction *m_removeAction;
 };
 

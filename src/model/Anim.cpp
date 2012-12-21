@@ -60,3 +60,8 @@ void Anim::setFps(int fps)
     if(m_model)
         m_model->emitAnimChanged(this, AnimModel::FpsColumn);
 }
+
+AnimModel *Anim::model() const
+{
+    return m_model;
+}

@@ -13,12 +13,13 @@ class JointDelegate;
 class JointProxyModel;
 class QTreeView;
 class QSpinBox;
+class AnimsWidget;
 
 class TimeWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TimeWidget(JointModel *model, QWidget *parent = 0);
+    explicit TimeWidget(AnimsWidget *animsWidget, JointModel *model, QWidget *parent = 0);
 
 signals:
     void currentFrameChanged(int frame);
@@ -41,6 +42,7 @@ private:
     void updateFpsButton();
 
     Ui::TimeWidget *ui;
+    AnimsWidget *m_animsWidget;
     JointModel *m_model;
     JointDelegate *m_delegate;
     JointProxyModel *m_leftProxy;

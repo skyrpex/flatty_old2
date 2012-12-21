@@ -5,7 +5,7 @@
 #include "widgets/time/JointProxyModel.h"
 #include "widgets/time/JointDelegate.h"
 #include "widgets/time/JointHeaderView.h"
-#include "commands/AnimFpsEditCommand.h"
+#include "commands/FpsCommand.h"
 #include "model/Anim.h"
 #include "Application.h"
 #include <QTreeView>
@@ -22,9 +22,10 @@ const char * const OneFrameCountButtonText = "1 frame";
 const char * const FrameCountButtonText = "%1 frames";
 const char * const FpsButtonText = "%1 fps";
 
-TimeWidget::TimeWidget(JointModel *model, QWidget *parent) :
+TimeWidget::TimeWidget(AnimsWidget *animsWidget, JointModel *model, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TimeWidget),
+    m_animsWidget(animsWidget),
     m_model(model),
     m_delegate(new JointDelegate(this)),
     m_leftProxy(new JointProxyModel(model, this)),
@@ -172,7 +173,7 @@ void TimeWidget::showFpsDialog()
         return;
 
     // Change fps
-    AnimFpsEditCommand *command = new AnimFpsEditCommand(m_currentAnim, result);
+    FpsCommand *command = new FpsCommand(m_currentAnim, result, m_animsWidget);
     qApp->undoStack()->push(command);
     updateFpsButton();
 }

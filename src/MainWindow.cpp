@@ -6,7 +6,6 @@
 #include "widgets/TimeWidget.h"
 #include "widgets/GraphicsWidget.h"
 #include "Application.h"
-#include <QxGraphicsView>
 #include <QGraphicsScene>
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -22,8 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     new Joint("Rack", m_model->root());
 
-    TimeWidget *timeWidget = new TimeWidget(m_model);
     AnimsWidget *animsWidget = new AnimsWidget(m_model->animModel());
+    TimeWidget *timeWidget = new TimeWidget(animsWidget, m_model);
     GraphicsWidget *graphicsWidget = new GraphicsWidget(m_model);
 
     connect(animsWidget, SIGNAL(currentAnimChanged(int)), timeWidget, SLOT(setCurrentAnim(int)));

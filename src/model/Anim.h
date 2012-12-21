@@ -22,6 +22,8 @@ public:
     int fps() const;
     void setFps(int fps);
 
+    AnimModel *model() const;
+
 private:
     friend class AnimModel;
 

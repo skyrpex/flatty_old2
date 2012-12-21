@@ -29,8 +29,7 @@ SOURCES += \
     widgets/GraphicsWidget.cpp \
     commands/CreateAnimCommand.cpp \
     commands/DeleteAnimCommand.cpp \
-    commands/EditAnimCommand.cpp \
-    commands/AnimFpsEditCommand.cpp
+    commands/FpsCommand.cpp
 
 HEADERS  += \
     model/JointModel.h \
@@ -55,8 +54,7 @@ HEADERS  += \
     widgets/GraphicsWidget.h \
     commands/CreateAnimCommand.h \
     commands/DeleteAnimCommand.h \
-    commands/EditAnimCommand.h \
-    commands/AnimFpsEditCommand.h
+    commands/FpsCommand.h
 
 RESOURCES += \
     model/images/images.qrc
