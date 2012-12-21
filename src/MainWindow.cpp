@@ -10,6 +10,8 @@
 #include <QSplitter>
 #include <QVBoxLayout>
 
+const int StrecthFactor = 12;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -22,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     new Joint("Rack", m_model->root());
 
     AnimsWidget *animsWidget = new AnimsWidget(m_model->animModel());
-    TimeWidget *timeWidget = new TimeWidget(animsWidget, m_model);
+    TimeWidget *timeWidget = new TimeWidget(animsWidget, m_model, StrecthFactor);
     GraphicsWidget *graphicsWidget = new GraphicsWidget(m_model);
 
     connect(animsWidget, SIGNAL(currentAnimChanged(int)), timeWidget, SLOT(setCurrentAnim(int)));
@@ -32,9 +34,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QSplitter *horizontalSplitter = new QSplitter(this);
     horizontalSplitter->addWidget(animsWidget);
     horizontalSplitter->addWidget(graphicsWidget);
+    horizontalSplitter->setStretchFactor(1, StrecthFactor);
     QSplitter *verticalSplitter = new QSplitter(Qt::Vertical, this);
     verticalSplitter->addWidget(horizontalSplitter);
     verticalSplitter->addWidget(timeWidget);
+    verticalSplitter->setStretchFactor(0, StrecthFactor);
 
     QWidget *centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);

@@ -22,7 +22,7 @@ const char * const OneFrameCountButtonText = "1 frame";
 const char * const FrameCountButtonText = "%1 frames";
 const char * const FpsButtonText = "%1 fps";
 
-TimeWidget::TimeWidget(AnimsWidget *animsWidget, JointModel *model, QWidget *parent) :
+TimeWidget::TimeWidget(AnimsWidget *animsWidget, JointModel *model, int stretchFactor, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TimeWidget),
     m_animsWidget(animsWidget),
@@ -32,6 +32,7 @@ TimeWidget::TimeWidget(AnimsWidget *animsWidget, JointModel *model, QWidget *par
     m_rightProxy(new JointProxyModel(model, this))
 {
     ui->setupUi(this);
+    ui->splitter->setStretchFactor(1, stretchFactor);
 
     QTreeView *namesView = ui->namesView;
     QTreeView *timeLineView = ui->timeLineView;

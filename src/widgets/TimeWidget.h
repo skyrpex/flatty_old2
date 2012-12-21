@@ -19,7 +19,7 @@ class TimeWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TimeWidget(AnimsWidget *animsWidget, JointModel *model, QWidget *parent = 0);
+    explicit TimeWidget(AnimsWidget *animsWidget, JointModel *model, int stretchFactor, QWidget *parent = 0);
 
 signals:
     void currentFrameChanged(int frame);
