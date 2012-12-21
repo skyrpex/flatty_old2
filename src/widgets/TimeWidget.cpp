@@ -182,14 +182,16 @@ void TimeWidget::showFpsDialog()
 void TimeWidget::updateFrameCountButton()
 {
     int frameCount = m_currentAnim->frameCount();
-    const char * const text = (frameCount == 1)?
+    const char * const frameCountText = (frameCount == 1)?
                 OneFrameCountButtonText
               : FrameCountButtonText;
-    ui->frameCount->setText(tr(text).arg(frameCount));
+    QString text = tr(frameCountText).arg(frameCount);
+    ui->frameCount->setText(text);
 }
 
 void TimeWidget::updateFpsButton()
 {
     int fps = m_currentAnim->fps();
-    ui->fps->setText(tr(FpsButtonText).arg(fps));
+    QString text = tr(FpsButtonText).arg(fps);
+    ui->fps->setText(text);
 }
