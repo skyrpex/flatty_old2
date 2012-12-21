@@ -29,14 +29,12 @@ GraphicsWidget::GraphicsWidget(JointModel *model, QWidget *parent) :
 
 void GraphicsWidget::setCurrentAnim(int i)
 {
-    qDebug() << __FUNCTION__ << i;
     m_currentAnim = m_model->animModel()->anims().value(i);
     setCurrentFrame(0);
 }
 
 void GraphicsWidget::setCurrentFrame(int frame)
 {
-    qDebug() << __FUNCTION__ << frame;
     m_currentFrame = frame;
 
     QStack<GraphicsJoint *> stack;
