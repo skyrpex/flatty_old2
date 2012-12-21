@@ -9,6 +9,7 @@
 #include <QGraphicsScene>
 #include <QSplitter>
 #include <QVBoxLayout>
+#include <QUndoView>
 
 const int StrecthFactor = 12;
 
@@ -31,10 +32,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(animsWidget, SIGNAL(currentAnimChanged(int)), graphicsWidget, SLOT(setCurrentAnim(int)));
     connect(timeWidget, SIGNAL(currentFrameChanged(int)), graphicsWidget, SLOT(setCurrentFrame(int)));
 
+    QSplitter *smallVerticalSplitter = new QSplitter(Qt::Vertical);
+    smallVerticalSplitter->addWidget(animsWidget);
+    smallVerticalSplitter->addWidget(new QUndoView(qApp->undoStack()));
+
     QSplitter *horizontalSplitter = new QSplitter(this);
-    horizontalSplitter->addWidget(animsWidget);
+    horizontalSplitter->addWidget(smallVerticalSplitter);
     horizontalSplitter->addWidget(graphicsWidget);
     horizontalSplitter->setStretchFactor(1, StrecthFactor);
+
     QSplitter *verticalSplitter = new QSplitter(Qt::Vertical, this);
     verticalSplitter->addWidget(horizontalSplitter);
     verticalSplitter->addWidget(timeWidget);
